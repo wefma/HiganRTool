@@ -25,14 +25,13 @@ jobs:
         with:
           targets: i686-pc-windows-msvc
 
-      # The workspace is a 32-bit Windows tool; this also verifies every
-      # production crate with the target configured in .cargo/config.toml.
       - name: Check workspace
         run: cargo check --workspace
 
-      # These integration tests generate all of their own inputs and can run
-      # from the public checkout. Other tests intentionally require private
-      # game data and development scripts, so they are not suitable for CI.
+      # これらの統合テストは、必要な入力データをすべて自動生成するため、
+      # 公開リポジトリをチェックアウトした環境でも実行できる。
+      # 一方、他のテストは意図的に非公開のゲームデータや開発用スクリプトを必要とするため、
+      # CIでの実行には適していない。
       - name: Run public Rust tests
         run: >-
           cargo test -p higanr_build_res --lib;
