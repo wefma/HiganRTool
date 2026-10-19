@@ -1,0 +1,49 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Rust tests (Windows i686)
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: dtolnay/rust-toolchain@e2a55d2ffb04f378e9626c28d38b36d230d1e12f # stable @ 2026-10-09
+        with:
+          toolchain: stable
+          targets: i686-pc-windows-msvc
+
+      - name: Check workspace
+        run: cargo check --workspace
+
+      # これらの統合テストは、必要な入力データをすべて自動生成するため、
+      # 公開リポジトリをチェックアウトした環境でも実行できる。
+      # 一方、他のテストは意図的に非公開のゲームデータや開発用スクリプトを必要とするため、
+      # CIでの実行には適していない。
+      - name: Run public Rust tests
+        run: >-
+          cargo test -p higanr_build_res --lib;
+          cargo test -p higanr_core
+          --test alloc_check
+          --test learn_path
+          --test ipv6_path
+          --test rollback_sim
+          --test spectate_model
+          --test pacing_sum_cli
+          --test replay_mark_cmp_cli
+          --test replay_playcheck_cli
+          --test pred_eval_cli
+          --test replay_inputs_cli
