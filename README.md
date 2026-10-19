@@ -1,5 +1,7 @@
 # HiganRTool
 
+![Test](https://github.com/wefma/HiganRTool/actions/workflows/tests.yml/badge.svg?branch=main)
+
 <!-- zip:skip -->
 [English](./README.en.md)
 <!-- /zip:skip -->
